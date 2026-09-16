@@ -1,15 +1,20 @@
 package com.example.abimmarketlinkapp.ui.navigation
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -31,7 +36,7 @@ import com.example.abimmarketlinkapp.ui.dashboard.DashboardScreen
 import com.example.abimmarketlinkapp.ui.dashboard.DashboardViewModel
 import com.example.abimmarketlinkapp.ui.features.FeaturesScreen
 import com.example.abimmarketlinkapp.ui.login.LoginScreen
-import com.example.abimmarketlinkapp.ui.marketplace.MarketplaceScreen
+import com.example.abimmarketlinkapp.ui.marketplace.DiscoverScreen
 import com.example.abimmarketlinkapp.ui.marketplace.MarketplaceViewModel
 import com.example.abimmarketlinkapp.ui.marketplace.ProductDetailScreen
 import com.example.abimmarketlinkapp.ui.onboarding.OnboardingScreen
@@ -39,7 +44,6 @@ import com.example.abimmarketlinkapp.ui.orders.OrderDetailScreen
 import com.example.abimmarketlinkapp.ui.orders.OrdersScreen
 import com.example.abimmarketlinkapp.ui.orders.OrdersViewModel
 import com.example.abimmarketlinkapp.ui.profile.ProfileScreen
-import com.example.abimmarketlinkapp.ui.profile.ProfileViewModel
 import com.example.abimmarketlinkapp.ui.welcome.WelcomeScreen
 
 sealed class Screen(val route: String) {
@@ -62,6 +66,15 @@ sealed class Screen(val route: String) {
     }
     object Profile : Screen("profile")
     object Cart : Screen("cart")
+    
+    // Profile Sub-screens
+    object MyOrders : Screen("my_orders")
+    object DeliveryAddresses : Screen("delivery_addresses")
+    object PaymentMethods : Screen("payment_methods")
+    object Favorites : Screen("favorites")
+    object Notifications : Screen("notifications")
+    object HelpSupport : Screen("help_support")
+    object About : Screen("about")
 }
 
 @Composable
@@ -84,7 +97,6 @@ fun AppNavigation(
         Screen.Profile.route
     )
 
-    // Shared ViewModels to persist state across screens if needed
     val cartViewModel: CartViewModel = viewModel()
 
     if (windowSize == WindowWidthSizeClass.Expanded) {
@@ -150,13 +162,13 @@ fun AppNavHost(
             DashboardScreen(
                 viewModel = viewModel,
                 onBrowseProduceClick = { navController.navigate(Screen.Marketplace.route) },
-                onNotificationClick = { /* Navigate */ },
+                onNotificationClick = { navController.navigate(Screen.Notifications.route) },
                 onProfileClick = { navController.navigate(Screen.Profile.route) }
             )
         }
         composable(Screen.Marketplace.route) {
             val viewModel: MarketplaceViewModel = viewModel(factory = AppViewModelProvider.Factory)
-            MarketplaceScreen(
+            DiscoverScreen(
                 viewModel = viewModel,
                 onProductClick = { product -> navController.navigate(Screen.ProductDetail.createRoute(product.id)) },
                 onAddToCart = { product -> cartViewModel.addProduct(product) }
@@ -214,15 +226,14 @@ fun AppNavHost(
             }
         }
         composable(Screen.Profile.route) {
-            val viewModel: ProfileViewModel = viewModel(factory = AppViewModelProvider.Factory)
             ProfileScreen(
-                viewModel = viewModel,
                 onLogoutClick = {
                     mainViewModel.setOnboarded(false)
-                    navController.navigate(Screen.Onboarding.route) {
-                        popUpTo(0)
+                    navController.navigate(Screen.Login.route) {
+                        popUpTo(0) { inclusive = true }
                     }
-                }
+                },
+                onMenuItemClick = { route -> navController.navigate(route) }
             )
         }
         composable(Screen.Cart.route) {
@@ -232,6 +243,36 @@ fun AppNavHost(
                 onCheckoutClick = { /* Navigate */ }
             )
         }
+        
+        // Profile Sub-screens placeholders
+        composable(Screen.MyOrders.route) { PlaceholderScreen("My Orders", navController) }
+        composable(Screen.DeliveryAddresses.route) { PlaceholderScreen("Delivery Addresses", navController) }
+        composable(Screen.PaymentMethods.route) { PlaceholderScreen("Payment Methods", navController) }
+        composable(Screen.Favorites.route) { PlaceholderScreen("Favorites", navController) }
+        composable(Screen.Notifications.route) { PlaceholderScreen("Notifications", navController) }
+        composable(Screen.HelpSupport.route) { PlaceholderScreen("Help & Support", navController) }
+        composable(Screen.About.route) { PlaceholderScreen("About Abim MarketLink", navController) }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun PlaceholderScreen(title: String, navController: NavHostController) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(title, fontWeight = FontWeight.Bold) },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                }
+            )
+        }
+    ) { innerPadding ->
+        Box(modifier = Modifier.fillMaxSize().padding(innerPadding), contentAlignment = Alignment.Center) {
+            Text("$title - Coming Soon", style = MaterialTheme.typography.headlineSmall)
+        }
     }
 }
 
@@ -239,7 +280,7 @@ fun AppNavHost(
 fun AppBottomNavigation(navController: NavHostController, currentDestination: NavDestination?) {
     NavigationBar(
         containerColor = Color.White,
-        contentColor = MaterialTheme.colorScheme.primary
+        contentColor = Color(0xFF1B5E20)
     ) {
         val items = listOf(
             Triple(Screen.Dashboard.route, stringResource(R.string.nav_home), Icons.Default.Home),
@@ -262,7 +303,14 @@ fun AppBottomNavigation(navController: NavHostController, currentDestination: Na
                         launchSingleTop = true
                         restoreState = true
                     }
-                }
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = Color(0xFF1B5E20),
+                    selectedTextColor = Color(0xFF1B5E20),
+                    unselectedIconColor = Color.Gray,
+                    unselectedTextColor = Color.Gray,
+                    indicatorColor = Color(0xFFE8F5E9)
+                )
             )
         }
     }
@@ -272,7 +320,7 @@ fun AppBottomNavigation(navController: NavHostController, currentDestination: Na
 fun AppNavRail(navController: NavHostController, currentDestination: NavDestination?) {
     NavigationRail(
         containerColor = Color.White,
-        contentColor = MaterialTheme.colorScheme.primary
+        contentColor = Color(0xFF1B5E20)
     ) {
         val items = listOf(
             Triple(Screen.Dashboard.route, stringResource(R.string.nav_home), Icons.Default.Home),
@@ -295,7 +343,14 @@ fun AppNavRail(navController: NavHostController, currentDestination: NavDestinat
                         launchSingleTop = true
                         restoreState = true
                     }
-                }
+                },
+                colors = NavigationRailItemDefaults.colors(
+                    selectedIconColor = Color(0xFF1B5E20),
+                    selectedTextColor = Color(0xFF1B5E20),
+                    unselectedIconColor = Color.Gray,
+                    unselectedTextColor = Color.Gray,
+                    indicatorColor = Color(0xFFE8F5E9)
+                )
             )
         }
     }
