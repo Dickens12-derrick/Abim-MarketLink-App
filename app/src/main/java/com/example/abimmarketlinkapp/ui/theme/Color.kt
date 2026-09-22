@@ -2,22 +2,33 @@ package com.example.abimmarketlinkapp.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Primary agricultural palette
-val PrimaryGreen = Color(0xFF1B5E20)
-val SecondaryGreen = Color(0xFF2EAD62)
-val LightGreen = Color(0xFFE8F5E9)
-val VeryLightGreen = Color(0xFFF1F8E9)
+// High-Contrast Light Mode Palette (WCAG AAA)
+val PrimaryGreen = Color(0xFF1B5E20) // Abim Green
+val OnPrimary = Color(0xFFFFFFFF)
+val PrimaryContainer = Color(0xFFE8F5E9)
+val OnPrimaryContainer = Color(0xFF002105)
 
-// Neutrals and Accents
-val DarkText = Color(0xFF121212)
-val SecondaryText = Color(0xFF757575)
-val White = Color(0xFFFFFFFF)
-val LightBlue = Color(0xFFE3F2FD)
-val InfoYellow = Color(0xFFFFF9C4)
+val Surface = Color(0xFFF8F9FA)
+val OnSurface = Color(0xFF1A1C1E) // Primary Text (Deep Charcoal)
+val OnSurfaceVariant = Color(0xFF42474E) // Secondary Text (Dark Slate Gray)
 
-// Dark Mode Palette
+val Outline = Color(0xFF72777F)
+val OutlineVariant = Color(0xFFC2C7CE)
+
+val Error = Color(0xFFBA1A1A)
+val OnError = Color(0xFFFFFFFF)
+val ErrorContainer = Color(0xFFFFDAD6)
+val OnErrorContainer = Color(0xFF410002)
+
+val Success = Color(0xFF2E7D32)
+val Warning = Color(0xFFF57C00)
+
+// High-Contrast Dark Mode Palette
 val PrimaryGreenDark = Color(0xFF81C784)
-val SecondaryGreenDark = Color(0xFF66BB6A)
-val BackgroundDark = Color(0xFF121212)
-val SurfaceDark = Color(0xFF1E1E1E)
-val OnSurfaceDark = Color(0xFFE0E0E0)
+val OnPrimaryDark = Color(0xFF00390A)
+val PrimaryContainerDark = Color(0xFF00531B)
+val OnPrimaryContainerDark = Color(0xFF9CF49E)
+
+val SurfaceDark = Color(0xFF1A1C1E)
+val OnSurfaceDark = Color(0xFFE2E2E6) // Crisp Off-White
+val OnSurfaceVariantDark = Color(0xFFC2C7CE) // Readable Light Gray

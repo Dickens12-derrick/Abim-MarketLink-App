@@ -40,20 +40,20 @@ fun ProfileScreen(
     if (showLogoutDialog) {
         AlertDialog(
             onDismissRequest = { showLogoutDialog = false },
-            title = { Text("Log Out") },
-            text = { Text("Are you sure you want to log out?") },
+            title = { Text("Log Out", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
+            text = { Text("Are you sure you want to log out?", color = MaterialTheme.colorScheme.onSurfaceVariant) },
             confirmButton = {
                 TextButton(onClick = {
                     showLogoutDialog = false
                     authViewModel.logout()
                     onLogoutClick()
                 }) {
-                    Text("Log Out", color = Color.Red)
+                    Text("Log Out", color = Color.Red, fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showLogoutDialog = false }) {
-                    Text("Cancel")
+                    Text("Cancel", color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
                 }
             }
         )
@@ -77,14 +77,14 @@ fun ProfileScreen(
     ) { innerPadding ->
         if (uiState.isLoading) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+                CircularProgressIndicator(color = Color(0xFF1B5E20))
             }
         } else {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
-                    .background(Color(0xFFF8F8F8))
+                    .background(Color(0xFFF8F9FA))
             ) {
                 item {
                     ProfileHeader(uiState.user)
@@ -95,7 +95,8 @@ fun ProfileScreen(
                     Card(
                         modifier = Modifier.padding(16.dp),
                         shape = RoundedCornerShape(16.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.White)
+                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
                     ) {
                         Column {
                             ProfileMenuItem(Icons.Default.Receipt, "My Orders") { onMenuItemClick("my_orders") }
@@ -126,7 +127,7 @@ fun ProfileScreen(
                         shape = RoundedCornerShape(12.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFEBEE), contentColor = Color(0xFFD32F2F))
                     ) {
-                        Text(text = "Log Out", fontWeight = FontWeight.Bold)
+                        Text(text = "Log Out", fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
                     }
                     Spacer(modifier = Modifier.height(32.dp))
                 }
@@ -141,7 +142,7 @@ fun ProfileHeader(user: User?) {
         modifier = Modifier
             .fillMaxWidth()
             .background(Color(0xFF1B5E20))
-            .padding(bottom = 24.dp),
+            .padding(bottom = 32.dp),
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -159,30 +160,33 @@ fun ProfileHeader(user: User?) {
                 text = user?.name ?: "Abim Farmer",
                 color = Color.White,
                 fontSize = 24.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.ExtraBold
             )
             Surface(
                 modifier = Modifier.padding(top = 8.dp),
-                shape = RoundedCornerShape(8.dp),
-                color = Color.White.copy(alpha = 0.2f)
+                shape = RoundedCornerShape(20.dp),
+                color = Color.White.copy(alpha = 0.25f)
             ) {
                 Text(
                     text = if (user?.isNewCustomer == true) "New Customer" else "Gold Member",
-                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                     color = Color.White,
-                    fontSize = 12.sp
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold
                 )
             }
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = user?.phone ?: "0770000000",
-                color = Color.White.copy(alpha = 0.8f),
-                fontSize = 14.sp
+                color = Color.White.copy(alpha = 0.9f),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
             )
             Text(
                 text = "Member since ${user?.memberSince ?: "2024"}",
-                color = Color.White.copy(alpha = 0.6f),
-                fontSize = 12.sp
+                color = Color.White.copy(alpha = 0.7f),
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Medium
             )
         }
     }
@@ -194,20 +198,20 @@ fun ProfileMenuItem(icon: ImageVector, title: String, onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() }
-            .padding(horizontal = 16.dp, vertical = 16.dp),
+            .padding(horizontal = 16.dp, vertical = 20.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
             modifier = Modifier
                 .size(40.dp)
-                .clip(RoundedCornerShape(8.dp))
+                .clip(RoundedCornerShape(10.dp))
                 .background(Color(0xFFE8F5E9)),
             contentAlignment = Alignment.Center
         ) {
-            Icon(icon, contentDescription = null, tint = Color(0xFF1B5E20), modifier = Modifier.size(20.dp))
+            Icon(icon, contentDescription = null, tint = Color(0xFF1B5E20), modifier = Modifier.size(22.dp))
         }
         Spacer(modifier = Modifier.width(16.dp))
-        Text(text = title, modifier = Modifier.weight(1f), fontSize = 16.sp, fontWeight = FontWeight.Medium)
-        Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, tint = Color.LightGray)
+        Text(text = title, modifier = Modifier.weight(1f), fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1A1C1E))
+        Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, tint = Color(0xFF42474E))
     }
 }

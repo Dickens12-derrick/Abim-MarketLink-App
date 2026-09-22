@@ -2,16 +2,7 @@ package com.example.abimmarketlinkapp.ui.onboarding
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -53,40 +44,43 @@ fun OnboardingScreen(
             Image(
                 painter = painterResource(id = R.drawable.ic_abim_marketlink_logo),
                 contentDescription = null,
-                modifier = Modifier.size(120.dp)
+                modifier = Modifier.size(150.dp)
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(32.dp))
             Text(
                 text = stringResource(id = R.string.onboarding_title),
                 color = Color.White,
                 fontSize = 32.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = stringResource(id = R.string.onboarding_subtitle),
-                color = Color.White.copy(alpha = 0.8f),
-                fontSize = 18.sp,
+                fontWeight = FontWeight.Black, // Increased weight
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
+                text = stringResource(id = R.string.onboarding_subtitle),
+                color = Color.White, // Pure white for better contrast
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(
                 text = stringResource(id = R.string.onboarding_supporting_text),
-                color = Color.White.copy(alpha = 0.7f),
-                fontSize = 14.sp,
-                fontStyle = FontStyle.Italic
+                color = Color.White.copy(alpha = 0.9f),
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Medium,
+                textAlign = TextAlign.Center
             )
         }
 
         Row(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 48.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                .padding(bottom = 64.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             OnboardingIndicator(isSelected = true)
             OnboardingIndicator(isSelected = true)
-            OnboardingIndicator(isSelected = false)
+            OnboardingIndicator(isSelected = true)
         }
     }
 }
@@ -95,8 +89,8 @@ fun OnboardingScreen(
 fun OnboardingIndicator(isSelected: Boolean) {
     Box(
         modifier = Modifier
-            .size(8.dp)
+            .size(10.dp)
             .clip(CircleShape)
-            .background(if (isSelected) Color.White else Color.White.copy(alpha = 0.4f))
+            .background(if (isSelected) Color.White else Color.White.copy(alpha = 0.5f))
     )
 }

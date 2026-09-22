@@ -36,6 +36,8 @@ import com.example.abimmarketlinkapp.ui.dashboard.DashboardScreen
 import com.example.abimmarketlinkapp.ui.dashboard.DashboardViewModel
 import com.example.abimmarketlinkapp.ui.features.FeaturesScreen
 import com.example.abimmarketlinkapp.ui.login.LoginScreen
+import com.example.abimmarketlinkapp.ui.login.ForgotPasswordScreen
+import com.example.abimmarketlinkapp.ui.login.SignUpScreen
 import com.example.abimmarketlinkapp.ui.marketplace.DiscoverScreen
 import com.example.abimmarketlinkapp.ui.marketplace.MarketplaceViewModel
 import com.example.abimmarketlinkapp.ui.marketplace.ProductDetailScreen
@@ -43,38 +45,59 @@ import com.example.abimmarketlinkapp.ui.onboarding.OnboardingScreen
 import com.example.abimmarketlinkapp.ui.orders.OrderDetailScreen
 import com.example.abimmarketlinkapp.ui.orders.OrdersScreen
 import com.example.abimmarketlinkapp.ui.orders.OrdersViewModel
+import com.example.abimmarketlinkapp.ui.orders.OrderCreationScreen
+import com.example.abimmarketlinkapp.ui.orders.PaymentScreen
+import com.example.abimmarketlinkapp.ui.orders.OrderTrackingScreen
 import com.example.abimmarketlinkapp.ui.profile.ProfileScreen
 import com.example.abimmarketlinkapp.ui.welcome.WelcomeScreen
+import com.example.abimmarketlinkapp.ui.farmer.FarmerDashboardScreen
+import com.example.abimmarketlinkapp.ui.farmer.AddCropScreen
+import com.example.abimmarketlinkapp.ui.farmer.InventoryScreen
 
 sealed class Screen(val route: String) {
+    // ROW 1: Onboarding & Auth
     object Onboarding : Screen("onboarding")
     object Welcome : Screen("welcome")
     object Features : Screen("features")
     object Login : Screen("login")
-    object Dashboard : Screen("dashboard")
+    object ForgotPassword : Screen("forgot_password")
+    object SignUp : Screen("sign_up")
+
+    // ROW 2: Farmer & Marketplace
+    object FarmerDashboard : Screen("farmer_dashboard")
+    object AddCrop : Screen("add_crop")
+    object Inventory : Screen("inventory")
+    object MyInventoryDetail : Screen("inventory_detail/{cropId}") {
+        fun createRoute(cropId: String) = "inventory_detail/$cropId"
+    }
     object Marketplace : Screen("marketplace")
     object ProductDetail : Screen("product_detail/{productId}") {
         fun createRoute(productId: String) = "product_detail/$productId"
     }
+
+    // ROW 3: Checkout, Communication & Support
     object Chat : Screen("chat")
     object ChatDetail : Screen("chat_detail/{chatId}/{chatName}") {
         fun createRoute(chatId: String, chatName: String) = "chat_detail/$chatId/$chatName"
     }
+    object OrderCreation : Screen("order_creation/{productId}") {
+        fun createRoute(productId: String) = "order_creation/$productId"
+    }
+    object Payment : Screen("payment/{orderId}") {
+        fun createRoute(orderId: String) = "payment/$orderId"
+    }
+    object OrderTracking : Screen("order_tracking/{orderId}") {
+        fun createRoute(orderId: String) = "order_tracking/$orderId"
+    }
+    object Profile : Screen("profile")
+    
+    // Additional Routes
     object Orders : Screen("orders")
     object OrderDetail : Screen("order_detail/{orderId}") {
         fun createRoute(orderId: String) = "order_detail/$orderId"
     }
-    object Profile : Screen("profile")
     object Cart : Screen("cart")
-    
-    // Profile Sub-screens
-    object MyOrders : Screen("my_orders")
-    object DeliveryAddresses : Screen("delivery_addresses")
-    object PaymentMethods : Screen("payment_methods")
-    object Favorites : Screen("favorites")
-    object Notifications : Screen("notifications")
-    object HelpSupport : Screen("help_support")
-    object About : Screen("about")
+    object Dashboard : Screen("dashboard")
 }
 
 @Composable
@@ -94,7 +117,8 @@ fun AppNavigation(
         Screen.Marketplace.route,
         Screen.Chat.route,
         Screen.Orders.route,
-        Screen.Profile.route
+        Screen.Profile.route,
+        Screen.FarmerDashboard.route
     )
 
     val cartViewModel: CartViewModel = viewModel()
@@ -132,13 +156,14 @@ fun AppNavHost(
         startDestination = startDestination,
         modifier = modifier
     ) {
+        // ROW 1
         composable(Screen.Onboarding.route) {
             OnboardingScreen(onFinished = { navController.navigate(Screen.Welcome.route) })
         }
         composable(Screen.Welcome.route) {
             WelcomeScreen(
-                onJoinAsFarmer = { /* Navigate or set user type */ },
-                onJoinAsBuyer = { /* Navigate or set user type */ },
+                onJoinAsFarmer = { navController.navigate(Screen.SignUp.route) },
+                onJoinAsBuyer = { navController.navigate(Screen.SignUp.route) },
                 onLoginClick = { navController.navigate(Screen.Login.route) },
                 onGetStarted = { navController.navigate(Screen.Features.route) }
             )
@@ -154,7 +179,33 @@ fun AppNavHost(
                         popUpTo(Screen.Onboarding.route) { inclusive = true }
                     }
                 },
-                onSignUpClick = { /* Navigate to sign up */ }
+                onSignUpClick = { navController.navigate(Screen.SignUp.route) }
+            )
+        }
+        composable(Screen.ForgotPassword.route) {
+            ForgotPasswordScreen(onBack = { navController.popBackStack() })
+        }
+        composable(Screen.SignUp.route) {
+            SignUpScreen(
+                onSignUpSuccess = { navController.navigate(Screen.Login.route) },
+                onLoginClick = { navController.navigate(Screen.Login.route) }
+            )
+        }
+
+        // ROW 2
+        composable(Screen.FarmerDashboard.route) {
+            FarmerDashboardScreen(
+                onAddCrop = { navController.navigate(Screen.AddCrop.route) },
+                onViewInventory = { navController.navigate(Screen.Inventory.route) }
+            )
+        }
+        composable(Screen.AddCrop.route) {
+            AddCropScreen(onBack = { navController.popBackStack() })
+        }
+        composable(Screen.Inventory.route) {
+            InventoryScreen(
+                onCropClick = { id -> navController.navigate(Screen.MyInventoryDetail.createRoute(id)) },
+                onBack = { navController.popBackStack() }
             )
         }
         composable(Screen.Dashboard.route) {
@@ -162,7 +213,7 @@ fun AppNavHost(
             DashboardScreen(
                 viewModel = viewModel,
                 onBrowseProduceClick = { navController.navigate(Screen.Marketplace.route) },
-                onNotificationClick = { navController.navigate(Screen.Notifications.route) },
+                onNotificationClick = { navController.navigate(Screen.Orders.route) },
                 onProfileClick = { navController.navigate(Screen.Profile.route) }
             )
         }
@@ -175,7 +226,7 @@ fun AppNavHost(
             )
         }
         composable(Screen.ProductDetail.route) { backStackEntry ->
-            val productId = backStackEntry.arguments?.getString("productId")
+            val productId = backStackEntry.arguments?.getString("productId") ?: ""
             val viewModel: MarketplaceViewModel = viewModel(factory = AppViewModelProvider.Factory)
             val product = viewModel.uiState.collectAsState().value.products.find { it.id == productId }
             if (product != null) {
@@ -185,10 +236,13 @@ fun AppNavHost(
                     onAddToCart = { p, qty -> 
                         repeat(qty) { cartViewModel.addProduct(p) }
                     },
-                    onContactSeller = { p -> navController.navigate(Screen.ChatDetail.createRoute("1", p.sellerName)) }
+                    onContactSeller = { p -> navController.navigate(Screen.ChatDetail.createRoute("1", p.sellerName)) },
+                    onPlaceOrder = { p -> navController.navigate(Screen.OrderCreation.createRoute(p.id)) }
                 )
             }
         }
+
+        // ROW 3
         composable(Screen.Chat.route) {
             val viewModel: ChatViewModel = viewModel(factory = AppViewModelProvider.Factory)
             ChatScreen(
@@ -207,23 +261,28 @@ fun AppNavHost(
                 onBackClick = { navController.popBackStack() }
             )
         }
-        composable(Screen.Orders.route) {
-            val viewModel: OrdersViewModel = viewModel(factory = AppViewModelProvider.Factory)
-            OrdersScreen(
-                viewModel = viewModel,
-                onOrderClick = { order -> navController.navigate(Screen.OrderDetail.createRoute(order.id)) }
+        composable(Screen.OrderCreation.route) { backStackEntry ->
+            val productId = backStackEntry.arguments?.getString("productId") ?: ""
+            OrderCreationScreen(
+                productId = productId,
+                onProceedToPayment = { orderId -> navController.navigate(Screen.Payment.createRoute(orderId)) },
+                onBack = { navController.popBackStack() }
             )
         }
-        composable(Screen.OrderDetail.route) { backStackEntry ->
-            val orderId = backStackEntry.arguments?.getString("orderId")
-            val viewModel: OrdersViewModel = viewModel(factory = AppViewModelProvider.Factory)
-            val order = viewModel.uiState.collectAsState().value.orders.find { it.id == orderId }
-            if (order != null) {
-                OrderDetailScreen(
-                    order = order,
-                    onBackClick = { navController.popBackStack() }
-                )
-            }
+        composable(Screen.Payment.route) { backStackEntry ->
+            val orderId = backStackEntry.arguments?.getString("orderId") ?: ""
+            PaymentScreen(
+                orderId = orderId,
+                onPaymentSuccess = { navController.navigate(Screen.OrderTracking.createRoute(orderId)) },
+                onBack = { navController.popBackStack() }
+            )
+        }
+        composable(Screen.OrderTracking.route) { backStackEntry ->
+            val orderId = backStackEntry.arguments?.getString("orderId") ?: ""
+            OrderTrackingScreen(
+                orderId = orderId,
+                onBack = { navController.popBackStack() }
+            )
         }
         composable(Screen.Profile.route) {
             ProfileScreen(
@@ -236,42 +295,12 @@ fun AppNavHost(
                 onMenuItemClick = { route -> navController.navigate(route) }
             )
         }
-        composable(Screen.Cart.route) {
-            CartScreen(
-                viewModel = cartViewModel,
-                onBackClick = { navController.popBackStack() },
-                onCheckoutClick = { /* Navigate */ }
+        composable(Screen.Orders.route) {
+            val viewModel: OrdersViewModel = viewModel(factory = AppViewModelProvider.Factory)
+            OrdersScreen(
+                viewModel = viewModel,
+                onOrderClick = { order -> navController.navigate(Screen.OrderDetail.createRoute(order.id)) }
             )
-        }
-        
-        // Profile Sub-screens placeholders
-        composable(Screen.MyOrders.route) { PlaceholderScreen("My Orders", navController) }
-        composable(Screen.DeliveryAddresses.route) { PlaceholderScreen("Delivery Addresses", navController) }
-        composable(Screen.PaymentMethods.route) { PlaceholderScreen("Payment Methods", navController) }
-        composable(Screen.Favorites.route) { PlaceholderScreen("Favorites", navController) }
-        composable(Screen.Notifications.route) { PlaceholderScreen("Notifications", navController) }
-        composable(Screen.HelpSupport.route) { PlaceholderScreen("Help & Support", navController) }
-        composable(Screen.About.route) { PlaceholderScreen("About Abim MarketLink", navController) }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun PlaceholderScreen(title: String, navController: NavHostController) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(title, fontWeight = FontWeight.Bold) },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            )
-        }
-    ) { innerPadding ->
-        Box(modifier = Modifier.fillMaxSize().padding(innerPadding), contentAlignment = Alignment.Center) {
-            Text("$title - Coming Soon", style = MaterialTheme.typography.headlineSmall)
         }
     }
 }
@@ -280,14 +309,14 @@ fun PlaceholderScreen(title: String, navController: NavHostController) {
 fun AppBottomNavigation(navController: NavHostController, currentDestination: NavDestination?) {
     NavigationBar(
         containerColor = Color.White,
-        contentColor = Color(0xFF1B5E20)
+        contentColor = MaterialTheme.colorScheme.primary
     ) {
         val items = listOf(
-            Triple(Screen.Dashboard.route, stringResource(R.string.nav_home), Icons.Default.Home),
-            Triple(Screen.Marketplace.route, stringResource(R.string.nav_discover), Icons.Default.GridView),
-            Triple(Screen.Chat.route, stringResource(R.string.nav_chat), Icons.Default.Chat),
-            Triple(Screen.Orders.route, stringResource(R.string.nav_orders), Icons.Default.Receipt),
-            Triple(Screen.Profile.route, stringResource(R.string.nav_profile), Icons.Default.Person)
+            Triple(Screen.Dashboard.route, "Home", Icons.Default.Home),
+            Triple(Screen.Marketplace.route, "Discover", Icons.Default.GridView),
+            Triple(Screen.Chat.route, "Chat", Icons.Default.Chat),
+            Triple(Screen.Orders.route, "Orders", Icons.Default.Receipt),
+            Triple(Screen.Profile.route, "Profile", Icons.Default.Person)
         )
 
         items.forEach { (route, label, icon) ->
@@ -303,14 +332,7 @@ fun AppBottomNavigation(navController: NavHostController, currentDestination: Na
                         launchSingleTop = true
                         restoreState = true
                     }
-                },
-                colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = Color(0xFF1B5E20),
-                    selectedTextColor = Color(0xFF1B5E20),
-                    unselectedIconColor = Color.Gray,
-                    unselectedTextColor = Color.Gray,
-                    indicatorColor = Color(0xFFE8F5E9)
-                )
+                }
             )
         }
     }
@@ -320,14 +342,14 @@ fun AppBottomNavigation(navController: NavHostController, currentDestination: Na
 fun AppNavRail(navController: NavHostController, currentDestination: NavDestination?) {
     NavigationRail(
         containerColor = Color.White,
-        contentColor = Color(0xFF1B5E20)
+        contentColor = MaterialTheme.colorScheme.primary
     ) {
         val items = listOf(
-            Triple(Screen.Dashboard.route, stringResource(R.string.nav_home), Icons.Default.Home),
-            Triple(Screen.Marketplace.route, stringResource(R.string.nav_discover), Icons.Default.GridView),
-            Triple(Screen.Chat.route, stringResource(R.string.nav_chat), Icons.Default.Chat),
-            Triple(Screen.Orders.route, stringResource(R.string.nav_orders), Icons.Default.Receipt),
-            Triple(Screen.Profile.route, stringResource(R.string.nav_profile), Icons.Default.Person)
+            Triple(Screen.Dashboard.route, "Home", Icons.Default.Home),
+            Triple(Screen.Marketplace.route, "Discover", Icons.Default.GridView),
+            Triple(Screen.Chat.route, "Chat", Icons.Default.Chat),
+            Triple(Screen.Orders.route, "Orders", Icons.Default.Receipt),
+            Triple(Screen.Profile.route, "Profile", Icons.Default.Person)
         )
 
         items.forEach { (route, label, icon) ->
@@ -343,14 +365,7 @@ fun AppNavRail(navController: NavHostController, currentDestination: NavDestinat
                         launchSingleTop = true
                         restoreState = true
                     }
-                },
-                colors = NavigationRailItemDefaults.colors(
-                    selectedIconColor = Color(0xFF1B5E20),
-                    selectedTextColor = Color(0xFF1B5E20),
-                    unselectedIconColor = Color.Gray,
-                    unselectedTextColor = Color.Gray,
-                    indicatorColor = Color(0xFFE8F5E9)
-                )
+                }
             )
         }
     }

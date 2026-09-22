@@ -48,7 +48,7 @@ fun MarketplaceScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF8F8F8))
+            .background(Color(0xFFF8F9FA))
     ) {
         MarketplaceHeader(
             searchQuery = uiState.searchQuery,
@@ -63,7 +63,7 @@ fun MarketplaceScreen(
 
         if (uiState.isLoading) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             }
         } else {
             LazyVerticalGrid(
@@ -92,7 +92,7 @@ fun MarketplaceHeader(
     onSearchQueryChange: (String) -> Unit
 ) {
     Surface(
-        shadowElevation = 4.dp,
+        shadowElevation = 2.dp,
         color = Color.White
     ) {
         Column(
@@ -116,10 +116,10 @@ fun MarketplaceHeader(
                         modifier = Modifier
                             .size(8.dp)
                             .clip(CircleShape)
-                            .background(Color(0xFF4CAF50))
+                            .background(Color(0xFF2E7D32))
                     )
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text(text = "Online • Seller", fontSize = 12.sp, color = Color.Gray)
+                    Text(text = "Online • Seller", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold)
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
@@ -127,15 +127,17 @@ fun MarketplaceHeader(
                 value = searchQuery,
                 onValueChange = onSearchQueryChange,
                 modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text(stringResource(R.string.marketplace_search_hint)) },
-                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-                trailingIcon = { Icon(Icons.Default.FilterList, contentDescription = null) },
+                placeholder = { Text(stringResource(R.string.marketplace_search_hint), color = MaterialTheme.colorScheme.onSurfaceVariant) },
+                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
+                trailingIcon = { Icon(Icons.Default.FilterList, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
                 shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedContainerColor = Color(0xFFF1F1F1),
-                    focusedContainerColor = Color(0xFFF1F1F1),
+                    unfocusedContainerColor = Color(0xFFF1F3F4),
+                    focusedContainerColor = Color(0xFFF1F3F4),
                     unfocusedBorderColor = Color.Transparent,
-                    focusedBorderColor = MaterialTheme.colorScheme.primary
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface
                 ),
                 singleLine = true
             )
@@ -180,14 +182,14 @@ fun CategoryChip(
         modifier = Modifier.clickable { onClick() },
         shape = RoundedCornerShape(20.dp),
         color = if (isSelected) MaterialTheme.colorScheme.primary else Color.White,
-        border = if (isSelected) null else BorderStroke(1.dp, Color.LightGray)
+        border = if (isSelected) null else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
         Text(
             text = label,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            color = if (isSelected) Color.White else Color.DarkGray,
+            color = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
             fontSize = 14.sp,
-            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+            fontWeight = FontWeight.Bold
         )
     }
 }
@@ -238,21 +240,23 @@ fun ProductCard(
                 Text(
                     text = product.name,
                     style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1
                 )
                 Text(
                     text = "UGX ${product.price.toInt()}/${product.unit}",
                     color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.ExtraBold,
                     fontSize = 14.sp
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = "${product.farmName} • ${product.distance}",
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color.Gray,
-                    maxLines = 1
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -263,17 +267,18 @@ fun ProductCard(
                         modifier = Modifier.size(14.dp)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text(text = product.rating.toString(), fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                    Text(text = " (${product.reviewCount})", fontSize = 12.sp, color = Color.Gray)
+                    Text(text = product.rating.toString(), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+                    Text(text = " (${product.reviewCount})", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold)
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 Button(
                     onClick = onAddToCart,
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(8.dp),
-                    contentPadding = PaddingValues(0.dp)
+                    contentPadding = PaddingValues(0.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
-                    Text(text = "Add to Cart", fontSize = 12.sp)
+                    Text(text = "Add to Cart", fontSize = 12.sp, fontWeight = FontWeight.Bold)
                 }
             }
         }

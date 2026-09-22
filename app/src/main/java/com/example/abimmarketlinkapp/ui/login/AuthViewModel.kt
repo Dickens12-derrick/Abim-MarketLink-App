@@ -9,6 +9,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,9 +28,9 @@ class AuthViewModel @Inject constructor(
     private val _authState = MutableStateFlow<AuthState>(AuthState.Idle)
     val authState: StateFlow<AuthState> = _authState.asStateFlow()
 
-    fun login(phone: String, password: String) {
-        if (phone.length != 10) {
-            _authState.value = AuthState.Error("Phone number must be 10 digits")
+    fun login(identity: String, password: String) {
+        if (identity.isBlank()) {
+            _authState.value = AuthState.Error("Email or Phone Number is required")
             return
         }
         if (password.length < 6) {
@@ -40,28 +41,70 @@ class AuthViewModel @Inject constructor(
         viewModelScope.launch {
             _authState.value = AuthState.Loading
             
-            // Mock login logic
             try {
                 // Simulate network delay
                 delay(1500)
                 
-                if (phone == "0770000000" && password == "password") {
-                    val mockUser = User(
-                        id = "user_123",
-                        name = "Abim Farmer",
-                        phone = phone,
+                // Get stored user data
+                val storedUser = dataStoreManager.user.first()
+                val storedPassword = dataStoreManager.userPassword.first()
+
+                val isDefaultMock = (identity == "0770000000" || identity == "admin@abim.com") && password == "password"
+                val isRegisteredUser = storedUser != null && 
+                        (storedUser.phone == identity || storedUser.email == identity) && 
+                        storedPassword == password
+
+                if (isDefaultMock || isRegisteredUser) {
+                    
+                    val userToLogin = storedUser ?: User(
+                        id = "user_default",
+                        name = "Abim Admin",
+                        email = "admin@abim.com",
+                        phone = "0770000000",
                         role = "Farmer",
                         memberSince = "Jan 2024",
                         isNewCustomer = false,
                         avatarUrl = null
                     )
-                    dataStoreManager.saveUser(mockUser)
-                    _authState.value = AuthState.Success(mockUser)
+                    
+                    if (storedUser == null) {
+                        dataStoreManager.saveUser(userToLogin)
+                    }
+                    
+                    _authState.value = AuthState.Success(userToLogin)
                 } else {
-                    _authState.value = AuthState.Error("Invalid credentials. Try 0770000000 / password")
+                    _authState.value = AuthState.Error("Invalid credentials. Try your registered details or 0770000000 / password")
                 }
             } catch (e: Exception) {
                 _authState.value = AuthState.Error("An error occurred: ${e.message}")
+            }
+        }
+    }
+
+    fun signUp(name: String, email: String, phone: String, password: String) {
+        if (name.isBlank() || email.isBlank() || phone.isBlank() || password.length < 6) {
+            _authState.value = AuthState.Error("Please fill all fields. Password min 6 chars.")
+            return
+        }
+
+        viewModelScope.launch {
+            _authState.value = AuthState.Loading
+            try {
+                delay(1500)
+                val newUser = User(
+                    id = "user_${System.currentTimeMillis()}",
+                    name = name,
+                    email = email,
+                    phone = phone,
+                    role = "Buyer", // Default role
+                    memberSince = "May 2024",
+                    isNewCustomer = true,
+                    avatarUrl = null
+                )
+                dataStoreManager.saveUser(newUser, password)
+                _authState.value = AuthState.Success(newUser)
+            } catch (e: Exception) {
+                _authState.value = AuthState.Error("Failed to create account: ${e.message}")
             }
         }
     }

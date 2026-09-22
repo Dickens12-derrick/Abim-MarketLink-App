@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
@@ -47,25 +46,30 @@ fun DashboardScreen(
                         Text(
                             text = greeting,
                             style = MaterialTheme.typography.bodyMedium,
-                            color = Color.Gray
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
                             text = stringResource(R.string.app_name),
                             style = MaterialTheme.typography.titleLarge,
+                            color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold
                         )
                     }
                 },
                 actions = {
                     IconButton(onClick = onNotificationClick) {
-                        Icon(Icons.Default.Notifications, contentDescription = null)
+                        Icon(Icons.Default.Notifications, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                     }
                     IconButton(onClick = onProfileClick) {
-                        Icon(Icons.Default.Person, contentDescription = null)
+                        Icon(Icons.Default.Person, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.White
+                )
             )
-        }
+        },
+        containerColor = Color(0xFFF8F9FA)
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
@@ -79,6 +83,7 @@ fun DashboardScreen(
                 Text(
                     text = stringResource(R.string.crops_performance),
                     style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -97,9 +102,10 @@ fun DashboardScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp),
-                    shape = RoundedCornerShape(24.dp)
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
-                    Text(text = stringResource(R.string.browse_all_produce), fontSize = 16.sp)
+                    Text(text = stringResource(R.string.browse_all_produce), fontSize = 16.sp, fontWeight = FontWeight.Bold)
                 }
             }
 
@@ -107,6 +113,7 @@ fun DashboardScreen(
                 Text(
                     text = "Top Products",
                     style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -133,6 +140,7 @@ fun OverviewCard() {
             Text(
                 text = stringResource(R.string.todays_overview),
                 style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -151,8 +159,8 @@ fun OverviewCard() {
 @Composable
 fun StatItem(label: String, value: String, change: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = label, style = MaterialTheme.typography.bodySmall, color = Color.Gray)
-        Text(text = value, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+        Text(text = label, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(text = value, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onPrimaryContainer, fontWeight = FontWeight.Bold)
         Text(text = change, style = MaterialTheme.typography.labelSmall, color = Color(0xFF2E7D32))
     }
 }
@@ -163,6 +171,7 @@ fun WeeklyYieldSection() {
         Text(
             text = stringResource(R.string.weekly_yield),
             style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -186,7 +195,7 @@ fun WeeklyYieldSection() {
                             .background(MaterialTheme.colorScheme.primary)
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = day, style = MaterialTheme.typography.labelSmall)
+                    Text(text = day, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurface)
                 }
             }
         }
@@ -217,12 +226,13 @@ fun ProductStatsItem(product: Product) {
             )
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
-                Text(text = product.name, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold)
-                Text(text = product.farmName, style = MaterialTheme.typography.bodySmall, color = Color.Gray)
+                Text(text = product.name, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Bold)
+                Text(text = product.farmName, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Text(
                 text = "${product.availableQuantity.toInt()}${product.unit}",
                 style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.Bold
             )
         }
