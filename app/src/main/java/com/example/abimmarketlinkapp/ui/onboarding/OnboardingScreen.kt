@@ -39,36 +39,39 @@ fun OnboardingScreen(
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(24.dp)
+            modifier = Modifier.fillMaxWidth() // Fills entire width
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_abim_marketlink_logo),
                 contentDescription = null,
-                modifier = Modifier.size(150.dp)
+                modifier = Modifier.size(180.dp) // Slightly larger
             )
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(40.dp))
             Text(
                 text = stringResource(id = R.string.onboarding_title),
                 color = Color.White,
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Black, // Increased weight
-                textAlign = TextAlign.Center
+                fontSize = 36.sp,
+                fontWeight = FontWeight.Black,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 16.dp)
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             Text(
                 text = stringResource(id = R.string.onboarding_subtitle),
-                color = Color.White, // Pure white for better contrast
-                fontSize = 20.sp,
+                color = Color.White,
+                fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 24.dp)
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(32.dp))
             Text(
                 text = stringResource(id = R.string.onboarding_supporting_text),
                 color = Color.White.copy(alpha = 0.9f),
-                fontSize = 15.sp,
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Medium,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 32.dp)
             )
         }
 
@@ -89,7 +92,7 @@ fun OnboardingScreen(
 fun OnboardingIndicator(isSelected: Boolean) {
     Box(
         modifier = Modifier
-            .size(10.dp)
+            .size(12.dp)
             .clip(CircleShape)
             .background(if (isSelected) Color.White else Color.White.copy(alpha = 0.5f))
     )

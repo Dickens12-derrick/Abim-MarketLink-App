@@ -32,69 +32,81 @@ fun WelcomeScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp)
             .background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(64.dp))
         Text(
             text = stringResource(id = R.string.welcome_title),
             style = MaterialTheme.typography.displayLarge,
-            color = MaterialTheme.colorScheme.primary,
+            color = Color.Black,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Black
         )
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(48.dp))
 
-        RoleCard(
-            title = stringResource(id = R.string.join_as_farmer),
-            description = stringResource(id = R.string.farmer_description),
-            icon = Icons.Default.Agriculture,
-            isPrimary = true,
-            onClick = onJoinAsFarmer
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp)
+        ) {
+            RoleCard(
+                title = stringResource(id = R.string.join_as_farmer),
+                description = stringResource(id = R.string.farmer_description),
+                icon = Icons.Default.Agriculture,
+                isPrimary = true,
+                onClick = onJoinAsFarmer
+            )
 
-        Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
-        RoleCard(
-            title = stringResource(id = R.string.buyer_title),
-            description = stringResource(id = R.string.buyer_description),
-            icon = Icons.Default.Eco,
-            isPrimary = false,
-            onClick = onJoinAsBuyer
-        )
+            RoleCard(
+                title = stringResource(id = R.string.buyer_title),
+                description = stringResource(id = R.string.buyer_description),
+                icon = Icons.Default.Eco,
+                isPrimary = false,
+                onClick = onJoinAsBuyer
+            )
+        }
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Button(
-            onClick = onGetStarted,
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(60.dp),
-            shape = RoundedCornerShape(16.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                .padding(horizontal = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = stringResource(id = R.string.get_started), fontSize = 18.sp, fontWeight = FontWeight.Bold)
+            Button(
+                onClick = onGetStarted,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+            ) {
+                Text(text = stringResource(id = R.string.get_started), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.White)
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Text(
+                text = stringResource(id = R.string.already_have_account),
+                modifier = Modifier.clickable { onLoginClick() },
+                color = Color.Black,
+                fontWeight = FontWeight.Black,
+                fontSize = 16.sp
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                WelcomeIndicator(isSelected = true)
+                WelcomeIndicator(isSelected = true)
+                WelcomeIndicator(isSelected = false)
+            }
+            Spacer(modifier = Modifier.height(32.dp))
         }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Text(
-            text = stringResource(id = R.string.already_have_account),
-            modifier = Modifier.clickable { onLoginClick() },
-            color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.ExtraBold,
-            fontSize = 16.sp
-        )
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            WelcomeIndicator(isSelected = true)
-            WelcomeIndicator(isSelected = true)
-            WelcomeIndicator(isSelected = false)
-        }
-        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
@@ -130,13 +142,13 @@ fun RoleCard(
             Column {
                 Text(
                     text = title,
-                    color = if (isPrimary) Color.White else Color(0xFF1A1C1E),
+                    color = if (isPrimary) Color.White else Color.Black,
                     fontWeight = FontWeight.Black,
                     fontSize = 20.sp
                 )
                 Text(
                     text = description,
-                    color = if (isPrimary) Color.White.copy(alpha = 0.9f) else Color(0xFF42474E),
+                    color = if (isPrimary) Color.White.copy(alpha = 0.9f) else Color.Black,
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -151,6 +163,6 @@ fun WelcomeIndicator(isSelected: Boolean) {
         modifier = Modifier
             .size(10.dp)
             .clip(CircleShape)
-            .background(if (isSelected) MaterialTheme.colorScheme.primary else Color(0xFFC2C7CE))
+            .background(if (isSelected) MaterialTheme.colorScheme.primary else Color.LightGray)
     )
 }

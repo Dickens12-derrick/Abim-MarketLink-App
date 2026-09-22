@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
@@ -39,15 +38,20 @@ fun ChatScreen(
                 title = {
                     Text(
                         text = stringResource(R.string.messages_title),
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF1A1C1E)
                     )
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.White
+                )
             )
-        }
+        },
+        containerColor = Color.White
     ) { innerPadding ->
         if (uiState.isLoading) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+                CircularProgressIndicator(color = Color(0xFF1B5E20))
             }
         } else {
             LazyColumn(
@@ -60,7 +64,7 @@ fun ChatScreen(
                         chat = chat,
                         onClick = { onChatClick(chat) }
                     )
-                    Divider(modifier = Modifier.padding(horizontal = 16.dp), color = Color.LightGray.copy(alpha = 0.5f))
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = Color.LightGray.copy(alpha = 0.5f))
                 }
             }
         }
@@ -76,17 +80,17 @@ fun ChatItem(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() }
-            .padding(16.dp),
+            .padding(20.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
             modifier = Modifier
-                .size(56.dp)
+                .size(60.dp)
                 .clip(CircleShape)
-                .background(Color.LightGray),
+                .background(Color(0xFFE8F5E9)),
             contentAlignment = Alignment.Center
         ) {
-            Icon(Icons.Default.Person, contentDescription = null, tint = Color.Gray, modifier = Modifier.size(32.dp))
+            Icon(Icons.Default.Person, contentDescription = null, tint = Color(0xFF1B5E20), modifier = Modifier.size(36.dp))
         }
         Spacer(modifier = Modifier.width(16.dp))
         Column(modifier = Modifier.weight(1f)) {
@@ -98,12 +102,14 @@ fun ChatItem(
                 Text(
                     text = chat.otherPartyName,
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color(0xFF1A1C1E)
                 )
                 Text(
                     text = chat.lastMessageTime,
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color.Gray
+                    color = Color(0xFF42474E),
+                    fontWeight = FontWeight.Bold
                 )
             }
             Spacer(modifier = Modifier.height(4.dp))
@@ -115,7 +121,8 @@ fun ChatItem(
                 Text(
                     text = chat.lastMessage,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Gray,
+                    color = Color(0xFF42474E),
+                    fontWeight = FontWeight.Medium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.weight(1f)
@@ -124,14 +131,14 @@ fun ChatItem(
                     Spacer(modifier = Modifier.width(8.dp))
                     Surface(
                         shape = CircleShape,
-                        color = MaterialTheme.colorScheme.primary
+                        color = Color(0xFF1B5E20)
                     ) {
                         Text(
                             text = chat.unreadCount.toString(),
-                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                             color = Color.White,
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Bold
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Black
                         )
                     }
                 }

@@ -29,9 +29,14 @@ fun ForgotPasswordScreen(onBack: () -> Unit) {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.White,
+                    titleContentColor = Color(0xFF1A1C1E)
+                )
             )
-        }
+        },
+        containerColor = Color.White
     ) { padding ->
         Column(
             modifier = Modifier
@@ -45,7 +50,8 @@ fun ForgotPasswordScreen(onBack: () -> Unit) {
             Text(
                 text = "Enter your email to get a reset link",
                 style = MaterialTheme.typography.bodyLarge,
-                color = Color(0xFF42474E),
+                color = Color(0xFF1A1C1E),
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier.align(Alignment.Start)
             )
 
@@ -54,13 +60,22 @@ fun ForgotPasswordScreen(onBack: () -> Unit) {
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
-                label = { Text("Email Address", color = Color(0xFF1A1C1E)) },
+                label = { Text("Email Address", fontWeight = FontWeight.Bold) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
-                leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
+                leadingIcon = { Icon(Icons.Default.Email, contentDescription = null, tint = Color(0xFF1B5E20)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 singleLine = true,
-                placeholder = { Text("you@example.com") }
+                placeholder = { Text("you@example.com") },
+                textStyle = MaterialTheme.typography.bodyLarge.copy(color = Color(0xFF1A1C1E), fontWeight = FontWeight.Bold),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color(0xFF1B5E20),
+                    unfocusedBorderColor = Color.Gray,
+                    focusedLabelColor = Color(0xFF1B5E20),
+                    unfocusedLabelColor = Color(0xFF1A1C1E),
+                    focusedTextColor = Color(0xFF1A1C1E),
+                    unfocusedTextColor = Color(0xFF1A1C1E)
+                )
             )
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -73,15 +88,16 @@ fun ForgotPasswordScreen(onBack: () -> Unit) {
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1B5E20))
             ) {
-                Text(text = "Send Reset Link", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(text = "Send Reset Link", fontSize = 16.sp, fontWeight = FontWeight.Black)
             }
             
             Spacer(modifier = Modifier.height(24.dp))
             
             Text(
                 text = "We'll send a 4-digit code to your email",
-                style = MaterialTheme.typography.bodySmall,
-                color = Color.Gray
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color(0xFF42474E),
+                fontWeight = FontWeight.Bold
             )
         }
     }

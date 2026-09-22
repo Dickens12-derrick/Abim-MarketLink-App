@@ -11,6 +11,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 sealed class AuthState {
@@ -91,14 +94,15 @@ class AuthViewModel @Inject constructor(
             _authState.value = AuthState.Loading
             try {
                 delay(1500)
+                val currentDate = SimpleDateFormat("MMM yyyy", Locale.getDefault()).format(Date())
                 val newUser = User(
                     id = "user_${System.currentTimeMillis()}",
                     name = name,
                     email = email,
                     phone = phone,
-                    role = "Buyer", // Default role
-                    memberSince = "May 2024",
-                    isNewCustomer = true,
+                    role = "Buyer", 
+                    memberSince = currentDate,
+                    isNewCustomer = true, // Tracked correctly for new sign-ups
                     avatarUrl = null
                 )
                 dataStoreManager.saveUser(newUser, password)

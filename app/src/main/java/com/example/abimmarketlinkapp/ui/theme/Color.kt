@@ -8,11 +8,11 @@ val OnPrimary = Color(0xFFFFFFFF)
 val PrimaryContainer = Color(0xFFE8F5E9)
 val OnPrimaryContainer = Color(0xFF002105)
 
-val Surface = Color(0xFFF8F9FA)
-val OnSurface = Color(0xFF1A1C1E) // Primary Text (Deep Charcoal)
-val OnSurfaceVariant = Color(0xFF42474E) // Secondary Text (Dark Slate Gray)
+val Surface = Color(0xFFFFFFFF)
+val OnSurface = Color(0xFF000000) // Pure Black Text
+val OnSurfaceVariant = Color(0xFF000000) // Also Pure Black for maximum visibility
 
-val Outline = Color(0xFF72777F)
+val Outline = Color(0xFF000000)
 val OutlineVariant = Color(0xFFC2C7CE)
 
 val Error = Color(0xFFBA1A1A)
@@ -31,4 +31,4 @@ val OnPrimaryContainerDark = Color(0xFF9CF49E)
 
 val SurfaceDark = Color(0xFF1A1C1E)
 val OnSurfaceDark = Color(0xFFE2E2E6) // Crisp Off-White
-val OnSurfaceVariantDark = Color(0xFFC2C7CE) // Readable Light Gray
+val OnSurfaceVariantDark = Color(0xFFE2E2E6) // Also Crisp Off-White

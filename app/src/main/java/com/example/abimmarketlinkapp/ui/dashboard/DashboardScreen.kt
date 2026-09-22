@@ -2,6 +2,7 @@ package com.example.abimmarketlinkapp.ui.dashboard
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -32,6 +33,7 @@ import java.util.*
 fun DashboardScreen(
     viewModel: DashboardViewModel,
     onBrowseProduceClick: () -> Unit,
+    onProductClick: (Product) -> Unit,
     onNotificationClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
@@ -46,22 +48,22 @@ fun DashboardScreen(
                         Text(
                             text = greeting,
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = Color.Black
                         )
                         Text(
                             text = stringResource(R.string.app_name),
                             style = MaterialTheme.typography.titleLarge,
-                            color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.Bold
+                            color = Color(0xFF1B5E20),
+                            fontWeight = FontWeight.Black
                         )
                     }
                 },
                 actions = {
                     IconButton(onClick = onNotificationClick) {
-                        Icon(Icons.Default.Notifications, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                        Icon(Icons.Default.Notifications, contentDescription = null, tint = Color(0xFF1B5E20))
                     }
                     IconButton(onClick = onProfileClick) {
-                        Icon(Icons.Default.Person, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                        Icon(Icons.Default.Person, contentDescription = null, tint = Color(0xFF1B5E20))
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -83,8 +85,8 @@ fun DashboardScreen(
                 Text(
                     text = stringResource(R.string.crops_performance),
                     style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontWeight = FontWeight.Bold
+                    color = Color.Black,
+                    fontWeight = FontWeight.Black
                 )
             }
 
@@ -101,11 +103,11 @@ fun DashboardScreen(
                     onClick = onBrowseProduceClick,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(56.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                        .height(60.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1B5E20))
                 ) {
-                    Text(text = stringResource(R.string.browse_all_produce), fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                    Text(text = stringResource(R.string.browse_all_produce), fontSize = 18.sp, fontWeight = FontWeight.Black, color = Color.White)
                 }
             }
 
@@ -113,13 +115,13 @@ fun DashboardScreen(
                 Text(
                     text = "Top Products",
                     style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontWeight = FontWeight.Bold
+                    color = Color.Black,
+                    fontWeight = FontWeight.Black
                 )
             }
 
             items(uiState.products) { product ->
-                ProductStatsItem(product)
+                ProductStatsItem(product, onClick = { onProductClick(product) })
             }
             
             item {
@@ -133,15 +135,16 @@ fun DashboardScreen(
 fun OverviewCard() {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFE8F5E9)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(20.dp)) {
             Text(
                 text = stringResource(R.string.todays_overview),
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                fontWeight = FontWeight.Bold
+                color = Color.Black,
+                fontWeight = FontWeight.Black
             )
             Spacer(modifier = Modifier.height(16.dp))
             Row(
@@ -159,9 +162,9 @@ fun OverviewCard() {
 @Composable
 fun StatItem(label: String, value: String, change: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = label, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        Text(text = value, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onPrimaryContainer, fontWeight = FontWeight.Bold)
-        Text(text = change, style = MaterialTheme.typography.labelSmall, color = Color(0xFF2E7D32))
+        Text(text = label, style = MaterialTheme.typography.bodySmall, color = Color.Black, fontWeight = FontWeight.Bold)
+        Text(text = value, style = MaterialTheme.typography.titleMedium, color = Color(0xFF1B5E20), fontWeight = FontWeight.Black)
+        Text(text = change, style = MaterialTheme.typography.labelSmall, color = Color(0xFF2E7D32), fontWeight = FontWeight.Black)
     }
 }
 
@@ -171,8 +174,8 @@ fun WeeklyYieldSection() {
         Text(
             text = stringResource(R.string.weekly_yield),
             style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            fontWeight = FontWeight.Bold
+            color = Color.Black,
+            fontWeight = FontWeight.Black
         )
         Spacer(modifier = Modifier.height(16.dp))
         Row(
@@ -192,10 +195,10 @@ fun WeeklyYieldSection() {
                             .width(16.dp)
                             .fillMaxHeight(heights[index])
                             .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
-                            .background(MaterialTheme.colorScheme.primary)
+                            .background(Color(0xFF1B5E20))
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = day, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurface)
+                    Text(text = day, style = MaterialTheme.typography.labelSmall, color = Color.Black, fontWeight = FontWeight.Bold)
                 }
             }
         }
@@ -203,16 +206,18 @@ fun WeeklyYieldSection() {
 }
 
 @Composable
-fun ProductStatsItem(product: Product) {
+fun ProductStatsItem(product: Product, onClick: () -> Unit) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Row(
             modifier = Modifier
-                .padding(12.dp)
+                .padding(16.dp)
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -220,20 +225,20 @@ fun ProductStatsItem(product: Product) {
                 painter = painterResource(product.imageRes),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(48.dp)
-                    .clip(RoundedCornerShape(8.dp)),
+                    .size(60.dp)
+                    .clip(RoundedCornerShape(12.dp)),
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
-                Text(text = product.name, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Bold)
-                Text(text = product.farmName, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(text = product.name, style = MaterialTheme.typography.titleMedium, color = Color.Black, fontWeight = FontWeight.Black)
+                Text(text = product.farmName, style = MaterialTheme.typography.bodySmall, color = Color(0xFF42474E), fontWeight = FontWeight.Bold)
             }
             Text(
                 text = "${product.availableQuantity.toInt()}${product.unit}",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.Bold
+                style = MaterialTheme.typography.bodyLarge,
+                color = Color(0xFF1B5E20),
+                fontWeight = FontWeight.Black
             )
         }
     }

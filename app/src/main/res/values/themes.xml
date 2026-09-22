@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="Theme.AbimMarketLinkApp" parent="android:Theme.Material.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="android:colorPrimary">@color/primary_green</item>
+        <item name="android:colorPrimaryDark">@color/primary_green</item>
+        <item name="android:colorAccent">@color/primary_green</item>
 
-    <style name="Theme.AbimMarketLinkApp" parent="android:Theme.Material.Light.NoActionBar" />
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/primary_green</item>
+
+        <!-- Text Colors -->
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="android:editTextColor">@color/text_primary</item>
+
+        <!-- Background/Surface -->
+        <item name="android:windowBackground">@color/white</item>
+    </style>
 </resources>

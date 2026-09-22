@@ -48,7 +48,7 @@ import com.example.abimmarketlinkapp.ui.orders.OrdersViewModel
 import com.example.abimmarketlinkapp.ui.orders.OrderCreationScreen
 import com.example.abimmarketlinkapp.ui.orders.PaymentScreen
 import com.example.abimmarketlinkapp.ui.orders.OrderTrackingScreen
-import com.example.abimmarketlinkapp.ui.profile.ProfileScreen
+import com.example.abimmarketlinkapp.ui.profile.*
 import com.example.abimmarketlinkapp.ui.welcome.WelcomeScreen
 import com.example.abimmarketlinkapp.ui.farmer.FarmerDashboardScreen
 import com.example.abimmarketlinkapp.ui.farmer.AddCropScreen
@@ -98,6 +98,15 @@ sealed class Screen(val route: String) {
     }
     object Cart : Screen("cart")
     object Dashboard : Screen("dashboard")
+
+    // Profile Menu Destinations
+    object MyOrders : Screen("my_orders")
+    object DeliveryAddresses : Screen("delivery_addresses")
+    object PaymentMethods : Screen("payment_methods")
+    object Favorites : Screen("favorites")
+    object Notifications : Screen("notifications")
+    object HelpSupport : Screen("help_support")
+    object AboutApp : Screen("about_app")
 }
 
 @Composable
@@ -213,7 +222,8 @@ fun AppNavHost(
             DashboardScreen(
                 viewModel = viewModel,
                 onBrowseProduceClick = { navController.navigate(Screen.Marketplace.route) },
-                onNotificationClick = { navController.navigate(Screen.Orders.route) },
+                onProductClick = { product -> navController.navigate(Screen.ProductDetail.createRoute(product.id)) },
+                onNotificationClick = { navController.navigate(Screen.Notifications.route) },
                 onProfileClick = { navController.navigate(Screen.Profile.route) }
             )
         }
@@ -302,6 +312,69 @@ fun AppNavHost(
                 onOrderClick = { order -> navController.navigate(Screen.OrderDetail.createRoute(order.id)) }
             )
         }
+
+        // Profile Sub-screens
+        composable(Screen.MyOrders.route) {
+            val viewModel: ChatViewModel = viewModel(factory = AppViewModelProvider.Factory)
+            ChatScreen(
+                viewModel = viewModel,
+                onChatClick = { chat -> navController.navigate(Screen.ChatDetail.createRoute(chat.id, chat.otherPartyName)) }
+            )
+        }
+        composable(Screen.DeliveryAddresses.route) { PlaceholderScreen("Delivery Addresses", navController) }
+        composable(Screen.PaymentMethods.route) {
+            PaymentScreen(
+                orderId = "default",
+                onPaymentSuccess = { navController.popBackStack() },
+                onBack = { navController.popBackStack() }
+            )
+        }
+        composable(Screen.Favorites.route) {
+            FavoritesScreen(
+                onProductClick = { product -> navController.navigate(Screen.ProductDetail.createRoute(product.id)) },
+                onAddToCart = { product -> cartViewModel.addProduct(product) },
+                onBack = { navController.popBackStack() }
+            )
+        }
+        composable(Screen.Notifications.route) {
+            val viewModel: ChatViewModel = viewModel(factory = AppViewModelProvider.Factory)
+            ChatScreen(
+                viewModel = viewModel,
+                onChatClick = { chat -> navController.navigate(Screen.ChatDetail.createRoute(chat.id, chat.otherPartyName)) }
+            )
+        }
+        composable(Screen.HelpSupport.route) {
+            HelpSupportScreen(onBack = { navController.popBackStack() })
+        }
+        composable(Screen.AboutApp.route) {
+            AboutScreen(
+                onBack = { navController.popBackStack() },
+                onContactSupport = { navController.navigate(Screen.HelpSupport.route) }
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun PlaceholderScreen(title: String, navController: NavHostController) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(title, fontWeight = FontWeight.Bold, color = Color.Black) },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = Color(0xFF1B5E20))
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
+            )
+        },
+        containerColor = Color(0xFFF8F9FA)
+    ) { innerPadding ->
+        Box(modifier = Modifier.fillMaxSize().padding(innerPadding), contentAlignment = Alignment.Center) {
+            Text("$title - Coming Soon", style = MaterialTheme.typography.headlineSmall, color = Color.Black, fontWeight = FontWeight.Bold)
+        }
     }
 }
 
@@ -309,7 +382,7 @@ fun AppNavHost(
 fun AppBottomNavigation(navController: NavHostController, currentDestination: NavDestination?) {
     NavigationBar(
         containerColor = Color.White,
-        contentColor = MaterialTheme.colorScheme.primary
+        contentColor = Color(0xFF1B5E20)
     ) {
         val items = listOf(
             Triple(Screen.Dashboard.route, "Home", Icons.Default.Home),
@@ -322,7 +395,7 @@ fun AppBottomNavigation(navController: NavHostController, currentDestination: Na
         items.forEach { (route, label, icon) ->
             NavigationBarItem(
                 icon = { Icon(icon, contentDescription = label) },
-                label = { Text(label) },
+                label = { Text(label, fontWeight = FontWeight.Bold) },
                 selected = currentDestination?.hierarchy?.any { it.route == route } == true,
                 onClick = {
                     navController.navigate(route) {
@@ -332,7 +405,14 @@ fun AppBottomNavigation(navController: NavHostController, currentDestination: Na
                         launchSingleTop = true
                         restoreState = true
                     }
-                }
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = Color(0xFF1B5E20),
+                    selectedTextColor = Color(0xFF1B5E20),
+                    unselectedIconColor = Color.Gray,
+                    unselectedTextColor = Color.Gray,
+                    indicatorColor = Color(0xFFE8F5E9)
+                )
             )
         }
     }
@@ -342,7 +422,7 @@ fun AppBottomNavigation(navController: NavHostController, currentDestination: Na
 fun AppNavRail(navController: NavHostController, currentDestination: NavDestination?) {
     NavigationRail(
         containerColor = Color.White,
-        contentColor = MaterialTheme.colorScheme.primary
+        contentColor = Color(0xFF1B5E20)
     ) {
         val items = listOf(
             Triple(Screen.Dashboard.route, "Home", Icons.Default.Home),
@@ -355,7 +435,7 @@ fun AppNavRail(navController: NavHostController, currentDestination: NavDestinat
         items.forEach { (route, label, icon) ->
             NavigationRailItem(
                 icon = { Icon(icon, contentDescription = label) },
-                label = { Text(label) },
+                label = { Text(label, fontWeight = FontWeight.Bold) },
                 selected = currentDestination?.hierarchy?.any { it.route == route } == true,
                 onClick = {
                     navController.navigate(route) {
@@ -365,7 +445,14 @@ fun AppNavRail(navController: NavHostController, currentDestination: NavDestinat
                         launchSingleTop = true
                         restoreState = true
                     }
-                }
+                },
+                colors = NavigationRailItemDefaults.colors(
+                    selectedIconColor = Color(0xFF1B5E20),
+                    selectedTextColor = Color(0xFF1B5E20),
+                    unselectedIconColor = Color.Gray,
+                    unselectedTextColor = Color.Gray,
+                    indicatorColor = Color(0xFFE8F5E9)
+                )
             )
         }
     }

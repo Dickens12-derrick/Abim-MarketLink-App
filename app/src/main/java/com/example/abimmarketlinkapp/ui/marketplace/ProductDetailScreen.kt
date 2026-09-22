@@ -67,7 +67,7 @@ fun ProductDetailScreen(
                         .padding(16.dp)
                         .background(Color.White.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
                 ) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null, tint = Color.Black)
                 }
             }
 
@@ -81,18 +81,18 @@ fun ProductDetailScreen(
                         Text(
                             text = product.name,
                             style = MaterialTheme.typography.headlineMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSurface
+                            fontWeight = FontWeight.Black,
+                            color = Color.Black
                         )
                         Text(
                             text = "UGX ${product.price.toInt()}/${product.unit}",
                             style = MaterialTheme.typography.titleLarge,
-                            color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.ExtraBold
+                            color = Color(0xFF1B5E20),
+                            fontWeight = FontWeight.Black
                         )
                     }
                     IconButton(onClick = { /* Toggle favorite */ }) {
-                        Icon(Icons.Default.FavoriteBorder, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                        Icon(Icons.Default.FavoriteBorder, contentDescription = null, tint = Color(0xFF1B5E20))
                     }
                 }
 
@@ -109,7 +109,7 @@ fun ProductDetailScreen(
                         ) {
                             Icon(Icons.Default.Star, contentDescription = null, tint = Color(0xFFFFB300), modifier = Modifier.size(16.dp))
                             Spacer(modifier = Modifier.width(4.dp))
-                            Text(text = "${product.rating} (${product.reviewCount} Reviews)", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1B5E20))
+                            Text(text = "${product.rating} (${product.reviewCount} Reviews)", fontSize = 12.sp, fontWeight = FontWeight.Black, color = Color(0xFF1B5E20))
                         }
                     }
                     if (product.isOrganic) {
@@ -123,7 +123,7 @@ fun ProductDetailScreen(
                                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                                 color = Color(0xFF2E7D32),
                                 fontSize = 12.sp,
-                                fontWeight = FontWeight.ExtraBold
+                                fontWeight = FontWeight.Black
                             )
                         }
                     }
@@ -141,14 +141,15 @@ fun ProductDetailScreen(
                 Text(
                     text = "Description",
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    fontWeight = FontWeight.Black,
+                    color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = product.description,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -157,7 +158,7 @@ fun ProductDetailScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    Text(text = "Quantity", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+                    Text(text = "Quantity", fontWeight = FontWeight.Black, color = Color.Black)
                     QuantitySelector(
                         quantity = quantity,
                         onQuantityChange = { quantity = it }
@@ -173,8 +174,8 @@ fun ProductDetailScreen(
 @Composable
 fun InfoRow(label: String, value: String) {
     Row(modifier = Modifier.padding(vertical = 4.dp)) {
-        Text(text = "$label: ", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
-        Text(text = value, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold)
+        Text(text = "$label: ", fontWeight = FontWeight.Black, color = Color.Black)
+        Text(text = value, color = Color.Black, fontWeight = FontWeight.Bold)
     }
 }
 
@@ -190,11 +191,11 @@ fun QuantitySelector(
             .padding(horizontal = 8.dp)
     ) {
         IconButton(onClick = { if (quantity > 1) onQuantityChange(quantity - 1) }) {
-            Text(text = "-", fontWeight = FontWeight.Bold, fontSize = 24.sp, color = MaterialTheme.colorScheme.primary)
+            Text(text = "-", fontWeight = FontWeight.Black, fontSize = 24.sp, color = Color(0xFF1B5E20))
         }
-        Text(text = quantity.toString(), modifier = Modifier.padding(horizontal = 16.dp), fontWeight = FontWeight.Bold, fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
+        Text(text = quantity.toString(), modifier = Modifier.padding(horizontal = 16.dp), fontWeight = FontWeight.Black, fontSize = 18.sp, color = Color.Black)
         IconButton(onClick = { onQuantityChange(quantity + 1) }) {
-            Text(text = "+", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = MaterialTheme.colorScheme.primary)
+            Text(text = "+", fontWeight = FontWeight.Black, fontSize = 20.sp, color = Color(0xFF1B5E20))
         }
     }
 }
@@ -218,21 +219,21 @@ fun ProductDetailBottomBar(
                 onClick = onContactSeller,
                 modifier = Modifier
                     .weight(1f)
-                    .height(56.dp),
-                shape = RoundedCornerShape(12.dp),
+                    .height(60.dp),
+                shape = RoundedCornerShape(16.dp),
                 border = BorderStroke(2.dp, Color(0xFF1B5E20))
             ) {
-                Text(text = "Chat Seller", color = Color(0xFF1B5E20), fontWeight = FontWeight.Bold)
+                Text(text = "Chat Seller", color = Color(0xFF1B5E20), fontWeight = FontWeight.Black)
             }
             Button(
                 onClick = onPlaceOrder,
                 modifier = Modifier
                     .weight(1f)
-                    .height(56.dp),
-                shape = RoundedCornerShape(12.dp),
+                    .height(60.dp),
+                shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1B5E20))
             ) {
-                Text(text = "Place Order", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Text(text = "Place Order", fontWeight = FontWeight.Black, fontSize = 16.sp, color = Color.White)
             }
         }
     }

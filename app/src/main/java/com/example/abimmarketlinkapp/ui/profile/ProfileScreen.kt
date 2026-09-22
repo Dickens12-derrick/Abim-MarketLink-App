@@ -25,6 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.abimmarketlinkapp.R
 import com.example.abimmarketlinkapp.data.model.User
 import com.example.abimmarketlinkapp.ui.login.AuthViewModel
+import com.example.abimmarketlinkapp.ui.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,8 +41,8 @@ fun ProfileScreen(
     if (showLogoutDialog) {
         AlertDialog(
             onDismissRequest = { showLogoutDialog = false },
-            title = { Text("Log Out", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
-            text = { Text("Are you sure you want to log out?", color = MaterialTheme.colorScheme.onSurfaceVariant) },
+            title = { Text("Log Out", fontWeight = FontWeight.Bold, color = Color.Black) },
+            text = { Text("Are you sure you want to log out?", color = Color.Black) },
             confirmButton = {
                 TextButton(onClick = {
                     showLogoutDialog = false
@@ -53,7 +54,7 @@ fun ProfileScreen(
             },
             dismissButton = {
                 TextButton(onClick = { showLogoutDialog = false }) {
-                    Text("Cancel", color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
+                    Text("Cancel", color = Color(0xFF1B5E20), fontWeight = FontWeight.Bold)
                 }
             }
         )
@@ -65,15 +66,16 @@ fun ProfileScreen(
                 title = {
                     Text(
                         text = stringResource(R.string.profile_title),
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFF1B5E20),
-                    titleContentColor = Color.White
+                    containerColor = Color(0xFF1B5E20)
                 )
             )
-        }
+        },
+        containerColor = Color(0xFFF8F9FA)
     ) { innerPadding ->
         if (uiState.isLoading) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -84,7 +86,6 @@ fun ProfileScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
-                    .background(Color(0xFFF8F9FA))
             ) {
                 item {
                     ProfileHeader(uiState.user)
@@ -99,19 +100,19 @@ fun ProfileScreen(
                         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
                     ) {
                         Column {
-                            ProfileMenuItem(Icons.Default.Receipt, "My Orders") { onMenuItemClick("my_orders") }
+                            ProfileMenuItem(Icons.Default.Receipt, "My Orders") { onMenuItemClick(Screen.MyOrders.route) }
                             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), thickness = 0.5.dp, color = Color.LightGray)
-                            ProfileMenuItem(Icons.Default.LocationOn, "Delivery Addresses") { onMenuItemClick("delivery_addresses") }
+                            ProfileMenuItem(Icons.Default.LocationOn, "Delivery Addresses") { onMenuItemClick(Screen.DeliveryAddresses.route) }
                             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), thickness = 0.5.dp, color = Color.LightGray)
-                            ProfileMenuItem(Icons.Default.Payment, "Payment Methods") { onMenuItemClick("payment_methods") }
+                            ProfileMenuItem(Icons.Default.Payment, "Payment Methods") { onMenuItemClick(Screen.PaymentMethods.route) }
                             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), thickness = 0.5.dp, color = Color.LightGray)
-                            ProfileMenuItem(Icons.Default.Favorite, "Favorites") { onMenuItemClick("favorites") }
+                            ProfileMenuItem(Icons.Default.Favorite, "Favorites") { onMenuItemClick(Screen.Favorites.route) }
                             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), thickness = 0.5.dp, color = Color.LightGray)
-                            ProfileMenuItem(Icons.Default.Notifications, "Notifications") { onMenuItemClick("notifications") }
+                            ProfileMenuItem(Icons.Default.Notifications, "Notifications") { onMenuItemClick(Screen.Notifications.route) }
                             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), thickness = 0.5.dp, color = Color.LightGray)
-                            ProfileMenuItem(Icons.Default.Help, "Help & Support") { onMenuItemClick("help_support") }
+                            ProfileMenuItem(Icons.Default.Help, "Help & Support") { onMenuItemClick(Screen.HelpSupport.route) }
                             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), thickness = 0.5.dp, color = Color.LightGray)
-                            ProfileMenuItem(Icons.Default.Info, "About Abim MarketLink") { onMenuItemClick("about") }
+                            ProfileMenuItem(Icons.Default.Info, "About Abim MarketLink") { onMenuItemClick(Screen.AboutApp.route) }
                         }
                     }
                 }
@@ -123,11 +124,11 @@ fun ProfileScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp)
-                            .height(56.dp),
+                            .height(60.dp),
                         shape = RoundedCornerShape(12.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFEBEE), contentColor = Color(0xFFD32F2F))
                     ) {
-                        Text(text = "Log Out", fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
+                        Text(text = "Log Out", fontWeight = FontWeight.Black, fontSize = 16.sp)
                     }
                     Spacer(modifier = Modifier.height(32.dp))
                 }
@@ -160,7 +161,7 @@ fun ProfileHeader(user: User?) {
                 text = user?.name ?: "Abim Farmer",
                 color = Color.White,
                 fontSize = 24.sp,
-                fontWeight = FontWeight.ExtraBold
+                fontWeight = FontWeight.Black
             )
             Surface(
                 modifier = Modifier.padding(top = 8.dp),
@@ -183,10 +184,10 @@ fun ProfileHeader(user: User?) {
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "Member since ${user?.memberSince ?: "2024"}",
+                text = "Member since ${user?.memberSince ?: "May 2024"}",
                 color = Color.White.copy(alpha = 0.7f),
                 fontSize = 13.sp,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Bold
             )
         }
     }
@@ -211,7 +212,7 @@ fun ProfileMenuItem(icon: ImageVector, title: String, onClick: () -> Unit) {
             Icon(icon, contentDescription = null, tint = Color(0xFF1B5E20), modifier = Modifier.size(22.dp))
         }
         Spacer(modifier = Modifier.width(16.dp))
-        Text(text = title, modifier = Modifier.weight(1f), fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1A1C1E))
-        Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, tint = Color(0xFF42474E))
+        Text(text = title, modifier = Modifier.weight(1f), fontSize = 16.sp, fontWeight = FontWeight.Black, color = Color.Black)
+        Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, tint = Color.Black)
     }
 }

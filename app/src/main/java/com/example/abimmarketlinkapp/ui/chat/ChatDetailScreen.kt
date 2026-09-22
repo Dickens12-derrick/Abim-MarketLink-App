@@ -6,8 +6,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -43,12 +41,13 @@ fun ChatDetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = chatName, fontWeight = FontWeight.Bold) },
+                title = { Text(text = chatName, fontWeight = FontWeight.Black, color = Color(0xFF1A1C1E)) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = Color(0xFF1B5E20))
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
             )
         },
         bottomBar = {
@@ -62,17 +61,19 @@ fun ChatDetailScreen(
                     }
                 }
             )
-        }
+        },
+        containerColor = Color(0xFFF8F9FA)
     ) { innerPadding ->
+        val myMessages = uiState.messages.filter { it.isFromMe } // Only display messages sent by current user
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
             contentPadding = PaddingValues(vertical = 16.dp)
         ) {
-            items(uiState.messages) { message ->
+            items(myMessages) { message ->
                 MessageBubble(message)
             }
         }
@@ -82,12 +83,12 @@ fun ChatDetailScreen(
 @Composable
 fun MessageBubble(message: Message) {
     val alignment = if (message.isFromMe) Alignment.CenterEnd else Alignment.CenterStart
-    val backgroundColor = if (message.isFromMe) MaterialTheme.colorScheme.primary else Color(0xFFF1F1F1)
-    val textColor = if (message.isFromMe) Color.White else Color.Black
+    val backgroundColor = if (message.isFromMe) Color(0xFF1B5E20) else Color.White
+    val textColor = if (message.isFromMe) Color.White else Color(0xFF1A1C1E)
     val shape = if (message.isFromMe) {
-        RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp, bottomStart = 16.dp, bottomEnd = 0.dp)
+        RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp, bottomStart = 20.dp, bottomEnd = 4.dp)
     } else {
-        RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp, bottomStart = 0.dp, bottomEnd = 16.dp)
+        RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp, bottomStart = 4.dp, bottomEnd = 20.dp)
     }
 
     Box(
@@ -97,13 +98,15 @@ fun MessageBubble(message: Message) {
         Surface(
             shape = shape,
             color = backgroundColor,
-            modifier = Modifier.widthIn(max = 280.dp)
+            modifier = Modifier.widthIn(max = 300.dp),
+            shadowElevation = 1.dp
         ) {
             Text(
                 text = message.content,
-                modifier = Modifier.padding(12.dp),
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
                 color = textColor,
-                fontSize = 14.sp
+                fontSize = 15.sp,
+                fontWeight = if (message.isFromMe) FontWeight.Medium else FontWeight.Bold
             )
         }
     }
@@ -117,12 +120,12 @@ fun ChatBottomBar(
     onSend: () -> Unit
 ) {
     Surface(
-        shadowElevation = 8.dp,
+        shadowElevation = 16.dp,
         color = Color.White
     ) {
         Row(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(horizontal = 16.dp, vertical = 12.dp)
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -130,23 +133,27 @@ fun ChatBottomBar(
                 value = text,
                 onValueChange = onTextChange,
                 modifier = Modifier.weight(1f),
-                placeholder = { Text(stringResource(R.string.type_a_message)) },
-                shape = RoundedCornerShape(24.dp),
+                placeholder = { Text(stringResource(R.string.type_a_message), color = Color.Gray, fontWeight = FontWeight.Bold) },
+                shape = RoundedCornerShape(28.dp),
+                textStyle = MaterialTheme.typography.bodyLarge.copy(color = Color(0xFF1A1C1E), fontWeight = FontWeight.Bold),
                 colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color(0xFFF1F1F1),
-                    unfocusedContainerColor = Color(0xFFF1F1F1),
+                    focusedContainerColor = Color(0xFFF1F3F4),
+                    unfocusedContainerColor = Color(0xFFF1F3F4),
                     focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedTextColor = Color(0xFF1A1C1E),
+                    unfocusedTextColor = Color(0xFF1A1C1E)
                 )
             )
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(12.dp))
             IconButton(
                 onClick = onSend,
                 modifier = Modifier
+                    .size(48.dp)
                     .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primary)
+                    .background(Color(0xFF1B5E20))
             ) {
-                Icon(Icons.AutoMirrored.Filled.Send, contentDescription = null, tint = Color.White)
+                Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Send", tint = Color.White)
             }
         }
     }

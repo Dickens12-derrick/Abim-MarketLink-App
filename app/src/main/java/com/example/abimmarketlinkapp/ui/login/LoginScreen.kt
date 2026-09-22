@@ -35,7 +35,7 @@ fun LoginScreen(
     onSignUpClick: () -> Unit,
     viewModel: AuthViewModel = hiltViewModel()
 ) {
-    var identity by remember { mutableStateOf("") } // Can be email or phone
+    var identity by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     var rememberMe by remember { mutableStateOf(false) }
@@ -77,13 +77,14 @@ fun LoginScreen(
                 text = "Abim MarketLink",
                 style = MaterialTheme.typography.headlineMedium,
                 color = Color(0xFF1B5E20),
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Black
             )
             
             Text(
                 text = "Connecting Farmers & Buyers",
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.Gray
+                style = MaterialTheme.typography.bodyLarge,
+                color = Color(0xFF42474E),
+                fontWeight = FontWeight.Bold
             )
             
             Spacer(modifier = Modifier.height(48.dp))
@@ -91,17 +92,23 @@ fun LoginScreen(
             OutlinedTextField(
                 value = identity,
                 onValueChange = { identity = it },
-                label = { Text("Email or Phone Number", color = Color(0xFF1A1C1E)) },
+                label = { Text("Email or Phone Number", fontWeight = FontWeight.Bold) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
-                leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) },
+                leadingIcon = { Icon(Icons.Default.Person, contentDescription = null, tint = Color(0xFF1B5E20)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 singleLine = true,
                 placeholder = { Text("0770000000 or you@mail.com") },
+                textStyle = MaterialTheme.typography.bodyLarge.copy(color = Color(0xFF1A1C1E), fontWeight = FontWeight.Bold),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color(0xFF1B5E20),
-                    unfocusedBorderColor = Color.LightGray,
-                    focusedLabelColor = Color(0xFF1B5E20)
+                    unfocusedBorderColor = Color.Gray,
+                    focusedLabelColor = Color(0xFF1B5E20),
+                    unfocusedLabelColor = Color(0xFF1A1C1E),
+                    focusedTextColor = Color(0xFF1A1C1E),
+                    unfocusedTextColor = Color(0xFF1A1C1E),
+                    focusedPlaceholderColor = Color.Gray,
+                    unfocusedPlaceholderColor = Color.Gray
                 )
             )
 
@@ -110,27 +117,31 @@ fun LoginScreen(
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
-                label = { Text("Password", color = Color(0xFF1A1C1E)) },
+                label = { Text("Password", fontWeight = FontWeight.Bold) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
-                leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
+                leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null, tint = Color(0xFF1B5E20)) },
                 trailingIcon = {
                     val image = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                        Icon(imageVector = image, contentDescription = null)
+                        Icon(imageVector = image, contentDescription = null, tint = Color(0xFF1B5E20))
                     }
                 },
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 singleLine = true,
+                textStyle = MaterialTheme.typography.bodyLarge.copy(color = Color(0xFF1A1C1E), fontWeight = FontWeight.Bold),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color(0xFF1B5E20),
-                    unfocusedBorderColor = Color.LightGray,
-                    focusedLabelColor = Color(0xFF1B5E20)
+                    unfocusedBorderColor = Color.Gray,
+                    focusedLabelColor = Color(0xFF1B5E20),
+                    unfocusedLabelColor = Color(0xFF1A1C1E),
+                    focusedTextColor = Color(0xFF1A1C1E),
+                    unfocusedTextColor = Color(0xFF1A1C1E)
                 )
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -143,14 +154,14 @@ fun LoginScreen(
                         onCheckedChange = { rememberMe = it },
                         colors = CheckboxDefaults.colors(checkedColor = Color(0xFF1B5E20))
                     )
-                    Text("Remember me", fontSize = 14.sp)
+                    Text("Remember me", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1A1C1E))
                 }
                 Text(
                     text = "Forgot Password?",
                     modifier = Modifier.clickable { /* Navigate to forgot password */ },
                     color = Color(0xFF1B5E20),
                     fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.Black
                 )
             }
 
@@ -168,11 +179,11 @@ fun LoginScreen(
                 if (authState is AuthState.Loading) {
                     CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
                 } else {
-                    Text(text = "Log In", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                    Text(text = "Log In", fontSize = 18.sp, fontWeight = FontWeight.Black)
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             OutlinedButton(
                 onClick = onSignUpClick,
@@ -180,9 +191,9 @@ fun LoginScreen(
                     .fillMaxWidth()
                     .height(56.dp),
                 shape = RoundedCornerShape(12.dp),
-                border = BorderStroke(1.dp, Color(0xFF1B5E20))
+                border = BorderStroke(2.dp, Color(0xFF1B5E20))
             ) {
-                Text(text = "Create Account", fontSize = 16.sp, color = Color(0xFF1B5E20))
+                Text(text = "Create Account", fontSize = 16.sp, color = Color(0xFF1B5E20), fontWeight = FontWeight.Black)
             }
 
             Spacer(modifier = Modifier.height(32.dp))

@@ -36,9 +36,14 @@ fun AddCropScreen(onBack: () -> Unit) {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.White,
+                    titleContentColor = Color(0xFF1A1C1E)
+                )
             )
-        }
+        },
+        containerColor = Color.White
     ) { padding ->
         Column(
             modifier = Modifier
@@ -46,54 +51,92 @@ fun AddCropScreen(onBack: () -> Unit) {
                 .padding(padding)
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             OutlinedTextField(
                 value = cropName,
                 onValueChange = { cropName = it },
-                label = { Text("Crop Name (e.g., Hass Avocado)", color = Color(0xFF1A1C1E)) },
+                label = { Text("Crop Name (e.g., Hass Avocado)", fontWeight = FontWeight.Bold) },
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(12.dp),
+                textStyle = MaterialTheme.typography.bodyLarge.copy(color = Color(0xFF1A1C1E), fontWeight = FontWeight.Bold),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color(0xFF1B5E20),
+                    unfocusedBorderColor = Color.Gray,
+                    focusedLabelColor = Color(0xFF1B5E20),
+                    unfocusedLabelColor = Color(0xFF1A1C1E),
+                    focusedTextColor = Color(0xFF1A1C1E),
+                    unfocusedTextColor = Color(0xFF1A1C1E)
+                )
             )
 
             OutlinedTextField(
                 value = category,
                 onValueChange = { category = it },
-                label = { Text("Category", color = Color(0xFF1A1C1E)) },
+                label = { Text("Category", fontWeight = FontWeight.Bold) },
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(12.dp),
+                textStyle = MaterialTheme.typography.bodyLarge.copy(color = Color(0xFF1A1C1E), fontWeight = FontWeight.Bold),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color(0xFF1B5E20),
+                    unfocusedBorderColor = Color.Gray,
+                    focusedLabelColor = Color(0xFF1B5E20),
+                    unfocusedLabelColor = Color(0xFF1A1C1E),
+                    focusedTextColor = Color(0xFF1A1C1E),
+                    unfocusedTextColor = Color(0xFF1A1C1E)
+                )
             )
 
             OutlinedTextField(
                 value = quantity,
                 onValueChange = { quantity = it },
-                label = { Text("Quantity (kg)", color = Color(0xFF1A1C1E)) },
+                label = { Text("Quantity (kg)", fontWeight = FontWeight.Bold) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                textStyle = MaterialTheme.typography.bodyLarge.copy(color = Color(0xFF1A1C1E), fontWeight = FontWeight.Bold),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color(0xFF1B5E20),
+                    unfocusedBorderColor = Color.Gray,
+                    focusedLabelColor = Color(0xFF1B5E20),
+                    unfocusedLabelColor = Color(0xFF1A1C1E),
+                    focusedTextColor = Color(0xFF1A1C1E),
+                    unfocusedTextColor = Color(0xFF1A1C1E)
+                )
             )
 
             OutlinedTextField(
                 value = pricePerKg,
                 onValueChange = { pricePerKg = it },
-                label = { Text("Price per kg (UGX)", color = Color(0xFF1A1C1E)) },
+                label = { Text("Price per kg (UGX)", fontWeight = FontWeight.Bold) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                textStyle = MaterialTheme.typography.bodyLarge.copy(color = Color(0xFF1A1C1E), fontWeight = FontWeight.Bold),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color(0xFF1B5E20),
+                    unfocusedBorderColor = Color.Gray,
+                    focusedLabelColor = Color(0xFF1B5E20),
+                    unfocusedLabelColor = Color(0xFF1A1C1E),
+                    focusedTextColor = Color(0xFF1A1C1E),
+                    unfocusedTextColor = Color(0xFF1A1C1E)
+                )
             )
 
             // Photo Upload Placeholder
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(150.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(Color(0xFFF1F1F1)),
+                    .height(180.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(Color(0xFFF8F9FA))
+                    .padding(16.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(Icons.Default.CloudUpload, contentDescription = null, tint = Color.Gray, modifier = Modifier.size(48.dp))
-                    Text("Upload Photo", color = Color.Gray)
+                    Icon(Icons.Default.CloudUpload, contentDescription = null, tint = Color(0xFF1B5E20), modifier = Modifier.size(56.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text("Upload Photo", color = Color(0xFF1B5E20), fontWeight = FontWeight.Bold)
                 }
             }
 
@@ -103,11 +146,11 @@ fun AddCropScreen(onBack: () -> Unit) {
                 onClick = { /* Add to inventory logic */ },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp),
+                    .height(60.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1B5E20))
             ) {
-                Text("Add to Inventory", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text("Add to Inventory", fontSize = 18.sp, fontWeight = FontWeight.Black)
             }
         }
     }

@@ -23,6 +23,8 @@ private val DarkColorScheme = darkColorScheme(
     surface = SurfaceDark,
     onSurface = OnSurfaceDark,
     onSurfaceVariant = OnSurfaceVariantDark,
+    background = SurfaceDark,
+    onBackground = OnSurfaceDark,
     error = Error,
     onError = OnError,
     errorContainer = ErrorContainer,
@@ -37,6 +39,8 @@ private val LightColorScheme = lightColorScheme(
     surface = Surface,
     onSurface = OnSurface,
     onSurfaceVariant = OnSurfaceVariant,
+    background = Surface,
+    onBackground = OnSurface,
     outlineVariant = OutlineVariant,
     error = Error,
     onError = OnError,
@@ -64,7 +68,7 @@ fun AbimMarketLinkTheme(
         SideEffect {
             val window = (view.context as Activity).window
             window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
 

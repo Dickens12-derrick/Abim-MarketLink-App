@@ -64,14 +64,15 @@ fun SignUpScreen(
                 text = "Create Account",
                 style = MaterialTheme.typography.headlineMedium,
                 color = Color(0xFF1B5E20),
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Black,
                 modifier = Modifier.align(Alignment.Start)
             )
             
             Text(
                 text = "Join the market and start trading",
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodyLarge,
                 color = Color(0xFF42474E),
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier.align(Alignment.Start)
             )
 
@@ -80,14 +81,19 @@ fun SignUpScreen(
             OutlinedTextField(
                 value = fullName,
                 onValueChange = { fullName = it },
-                label = { Text("Full Name", color = Color(0xFF1A1C1E)) },
+                label = { Text("Full Name", fontWeight = FontWeight.Bold) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
-                leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) },
+                leadingIcon = { Icon(Icons.Default.Person, contentDescription = null, tint = Color(0xFF1B5E20)) },
                 singleLine = true,
+                textStyle = MaterialTheme.typography.bodyLarge.copy(color = Color(0xFF1A1C1E), fontWeight = FontWeight.Bold),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color(0xFF1B5E20),
-                    focusedLabelColor = Color(0xFF1B5E20)
+                    unfocusedBorderColor = Color.Gray,
+                    focusedLabelColor = Color(0xFF1B5E20),
+                    unfocusedLabelColor = Color(0xFF1A1C1E),
+                    focusedTextColor = Color(0xFF1A1C1E),
+                    unfocusedTextColor = Color(0xFF1A1C1E)
                 )
             )
 
@@ -96,15 +102,20 @@ fun SignUpScreen(
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
-                label = { Text("Email Address", color = Color(0xFF1A1C1E)) },
+                label = { Text("Email Address", fontWeight = FontWeight.Bold) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
-                leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
+                leadingIcon = { Icon(Icons.Default.Email, contentDescription = null, tint = Color(0xFF1B5E20)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 singleLine = true,
+                textStyle = MaterialTheme.typography.bodyLarge.copy(color = Color(0xFF1A1C1E), fontWeight = FontWeight.Bold),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color(0xFF1B5E20),
-                    focusedLabelColor = Color(0xFF1B5E20)
+                    unfocusedBorderColor = Color.Gray,
+                    focusedLabelColor = Color(0xFF1B5E20),
+                    unfocusedLabelColor = Color(0xFF1A1C1E),
+                    focusedTextColor = Color(0xFF1A1C1E),
+                    unfocusedTextColor = Color(0xFF1A1C1E)
                 )
             )
 
@@ -112,17 +123,24 @@ fun SignUpScreen(
 
             OutlinedTextField(
                 value = phone,
-                onValueChange = { phone = it },
-                label = { Text("Phone Number", color = Color(0xFF1A1C1E)) },
+                onValueChange = { if (it.length <= 10) phone = it },
+                label = { Text("Phone Number", fontWeight = FontWeight.Bold) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
-                leadingIcon = { Icon(Icons.Default.Phone, contentDescription = null) },
+                leadingIcon = { Icon(Icons.Default.Phone, contentDescription = null, tint = Color(0xFF1B5E20)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                 singleLine = true,
                 placeholder = { Text("0770000000") },
+                textStyle = MaterialTheme.typography.bodyLarge.copy(color = Color(0xFF1A1C1E), fontWeight = FontWeight.Bold),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color(0xFF1B5E20),
-                    focusedLabelColor = Color(0xFF1B5E20)
+                    unfocusedBorderColor = Color.Gray,
+                    focusedLabelColor = Color(0xFF1B5E20),
+                    unfocusedLabelColor = Color(0xFF1A1C1E),
+                    focusedTextColor = Color(0xFF1A1C1E),
+                    unfocusedTextColor = Color(0xFF1A1C1E),
+                    focusedPlaceholderColor = Color.Gray,
+                    unfocusedPlaceholderColor = Color.Gray
                 )
             )
 
@@ -131,22 +149,27 @@ fun SignUpScreen(
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
-                label = { Text("Password", color = Color(0xFF1A1C1E)) },
+                label = { Text("Password", fontWeight = FontWeight.Bold) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
-                leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
+                leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null, tint = Color(0xFF1B5E20)) },
                 trailingIcon = {
                     val image = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                        Icon(imageVector = image, contentDescription = null)
+                        Icon(imageVector = image, contentDescription = null, tint = Color(0xFF1B5E20))
                     }
                 },
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 singleLine = true,
+                textStyle = MaterialTheme.typography.bodyLarge.copy(color = Color(0xFF1A1C1E), fontWeight = FontWeight.Bold),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color(0xFF1B5E20),
-                    focusedLabelColor = Color(0xFF1B5E20)
+                    unfocusedBorderColor = Color.Gray,
+                    focusedLabelColor = Color(0xFF1B5E20),
+                    unfocusedLabelColor = Color(0xFF1A1C1E),
+                    focusedTextColor = Color(0xFF1A1C1E),
+                    unfocusedTextColor = Color(0xFF1A1C1E)
                 )
             )
 
@@ -164,7 +187,8 @@ fun SignUpScreen(
                 Text(
                     text = "I agree to the Terms & Privacy Policy",
                     fontSize = 14.sp,
-                    color = Color(0xFF42474E)
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF1A1C1E)
                 )
             }
 
@@ -182,7 +206,7 @@ fun SignUpScreen(
                 if (authState is AuthState.Loading) {
                     CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
                 } else {
-                    Text(text = "Create Account", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                    Text(text = "Create Account", fontSize = 16.sp, fontWeight = FontWeight.Black)
                 }
             }
 
@@ -192,11 +216,11 @@ fun SignUpScreen(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "Already have an account? ", color = Color(0xFF42474E))
+                Text(text = "Already have an account? ", color = Color(0xFF42474E), fontWeight = FontWeight.Bold)
                 Text(
                     text = "Log In",
                     color = Color(0xFF1B5E20),
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.Black,
                     modifier = Modifier.clickable { onLoginClick() }
                 )
             }
